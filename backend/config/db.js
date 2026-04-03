@@ -7,7 +7,8 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: process.env.DB_PASSWORD,
-  database: 'hospital_db'
+  database: 'hospital_db',
+  dateStrings: true
 });
 
 db.connect((err) => {

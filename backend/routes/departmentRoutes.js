@@ -7,5 +7,7 @@ const auth = require('../middleware/authMiddleware');
 
 router.post('/add',auth, departmentController.addDepartment);
 router.get('/',auth, departmentController.getDepartment);
+router.put('/update/:id', auth, departmentController.updateDepartment);
+router.delete('/delete/:id', auth, departmentController.deleteDepartment);
 
 module.exports = router;
