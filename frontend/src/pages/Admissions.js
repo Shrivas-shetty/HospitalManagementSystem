@@ -28,7 +28,7 @@ function Admissions() {
     const payload = { ...newData, admission_date: today };
 
     try {
-      await API.post("/admissions/add", payload);
+      await API.post("/admissions/add-secure", payload);
       setMessage({ text: `Success! Admission logged for ${today}`, type: "success" });
       setNewData({ patient_id: '', room_id: '' });
       fetchAdmissions();
