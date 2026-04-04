@@ -244,6 +244,38 @@ payments
 
 
 
+DELIMITER //
+
+-- Trigger to mark room as Occupied when a new admission is added
+CREATE TRIGGER after_admission_insert
+AFTER INSERT ON admissions
+FOR EACH ROW
+BEGIN
+    UPDATE rooms 
+    SET status = 'Occupied' 
+    WHERE room_id = NEW.room_id;
+END //
+
+-- Trigger to mark room as Available when an admission is deleted (discharged)
+CREATE TRIGGER after_admission_delete
+AFTER DELETE ON admissions
+FOR EACH ROW
+BEGIN
+    UPDATE rooms 
+    SET status = 'Available' 
+    WHERE room_id = OLD.room_id;
+END //
+
+DELIMITER ;
+
+
+
+
+
+
+
+
+
 
 
 
