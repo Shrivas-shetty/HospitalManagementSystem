@@ -8,5 +8,6 @@ router.get('/', admissionController.getAdmissions);
 router.post('/add', admissionController.addAdmission);
 router.put('/update/:id', admissionController.updateAdmission);
 router.delete('/discharge/:id', admissionController.dischargeAdmission);
+router.post('/add-secure', admissionController.addAdmissionSecure);
 
 module.exports = router;
