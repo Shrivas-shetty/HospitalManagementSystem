@@ -85,3 +85,47 @@ exports.dischargeAdmission = (req, res) => {
     res.send("Discharged successfully");
   });
 };
+
+
+exports.addAdmissionSecure = (req, res) => {
+  const { patient_id, room_id, admission_date } = req.body;
+
+  // Step 1: Check if room exists and is currently 'Available'
+  const checkSql = "SELECT status FROM rooms WHERE room_id = ?";
+  
+  db.query(checkSql, [room_id], (err, roomResult) => {
+    if (err) return res.status(500).send("Database error during room check");
+    
+    if (roomResult.length === 0) {
+      return res.status(404).send("Error: Room ID does not exist.");
+    }
+
+    if (roomResult[0].status !== 'Available') {
+      return res.status(400).send(`Error: Room is currently ${roomResult[0].status}.`);
+    }
+
+    // Step 2: If available, proceed with admission
+    const insertSql = "INSERT INTO admissions (patient_id, room_id, admission_date) VALUES (?, ?, ?)";
+    db.query(insertSql, [patient_id, room_id, admission_date], (err, result) => {
+      if (err) {
+        console.error("MYSQL ERROR:", err.sqlMessage);
+        return res.status(500).send(err.sqlMessage);
+      }
+      res.send("Admission added successfully. Room status updated to Occupied.");
+    });
+  });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
