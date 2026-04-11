@@ -8,7 +8,8 @@ function StayHistory() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    API.get("/stay-history/all")
+    // Updated to the new /summary path
+    API.get("/stay-history/summary")
       .then(res => {
         setHistory(res.data);
         setLoading(false);
@@ -44,7 +45,6 @@ function StayHistory() {
         <Sidebar />
         
         <div style={{ flex: 1, padding: "40px" }}>
-          
           <div style={{ marginBottom: "30px" }}>
             <h1 style={{ color: "#00203f", margin: 0 }}>Occupancy Archive</h1>
             <p style={{ color: "#666" }}>Comprehensive log of patient admissions, room assignments, and stay durations.</p>
@@ -65,15 +65,11 @@ function StayHistory() {
                     <th style={thStyle}>Admit Date</th>
                     <th style={thStyle}>Discharge Date</th>
                     <th style={thStyle}>Stay Duration</th>
-                    <th style={thStyle}>Status</th>
+                    <th style={thStyle}>Charges (₹)</th>
                   </tr>
                 </thead>
                 <tbody>
                   {history.map((sh, index) => {
-                    const admit = new Date(sh.admit_date);
-                    const discharge = sh.discharge_date ? new Date(sh.discharge_date) : new Date();
-                    const diffTime = Math.max(0, discharge - admit); 
-                    const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                     const uniqueKey = `${sh.patient_id}-${sh.admit_date}-${index}`;
                     const isStillAdmitted = !sh.discharge_date;
 
@@ -83,7 +79,7 @@ function StayHistory() {
                         <td style={{ ...tdStyle, fontWeight: "600", color: "#2c3e50" }}>{sh.patient_name}</td>
                         <td style={tdStyle}>
                           <div style={{ fontWeight: "600" }}>Room {sh.room_number}</div>
-                          <div style={{ fontSize: "11px", color: "#3498db", textTransform: "uppercase" }}>{sh.room_type}</div>
+                          <div style={{ fontSize: "11px", color: "#3498db", textTransform: "uppercase" }}>{sh.type}</div>
                         </td>
                         <td style={tdStyle}>{sh.admit_date?.substring(0, 10)}</td>
                         <td style={tdStyle}>
@@ -94,15 +90,17 @@ function StayHistory() {
                           )}
                         </td>
                         <td style={tdStyle}>
-                          <span style={durationBadge}>{days} {days === 1 ? 'Day' : 'Days'}</span>
+                          <span style={durationBadge}>
+                            {sh.stay_days} {sh.stay_days === 1 ? 'Day' : 'Days'}
+                          </span>
                         </td>
                         <td style={tdStyle}>
                           <span style={{
-                            ...statusPill,
-                            backgroundColor: isStillAdmitted ? "#e8f5e9" : "#f1f2f6",
-                            color: isStillAdmitted ? "#2e7d32" : "#57606f"
+                            ...chargeBadge,
+                            backgroundColor: isStillAdmitted ? "#fff3e0" : "#e3f2fd",
+                            color: isStillAdmitted ? "#e65100" : "#1565c0"
                           }}>
-                            {isStillAdmitted ? "Active Stay" : "Archived"}
+                            ₹{sh.total_charges.toLocaleString('en-IN')}
                           </span>
                         </td>
                       </tr>
@@ -128,11 +126,10 @@ function StayHistory() {
   );
 }
 
-// Styling Constants
 const thStyle = { padding: "18px 15px", fontSize: "13px", fontWeight: "700", color: "#2980b9", textTransform: "uppercase" };
 const tdStyle = { padding: "18px 15px", fontSize: "14px" };
 const trStyle = { borderBottom: "1px solid #f0f0f0", transition: "0.2s" };
 const durationBadge = { backgroundColor: "rgba(41, 128, 185, 0.1)", color: "#2980b9", padding: "4px 10px", borderRadius: "6px", fontWeight: "700", fontSize: "13px" };
-const statusPill = { padding: "4px 12px", borderRadius: "20px", fontSize: "11px", fontWeight: "bold", textTransform: "uppercase" };
+const chargeBadge = { padding: "5px 12px", borderRadius: "6px", fontWeight: "bold", fontSize: "14px" };
 
 export default StayHistory;

@@ -1,7 +1,5 @@
 const db = require('../config/db');
 
-
-// Add Patient
 exports.addPatient = (req, res) => {
   const { name, age, gender, phone } = req.body;
 
@@ -16,10 +14,6 @@ exports.addPatient = (req, res) => {
   });
 };
 
-
-
-
-// Get All Patients
 exports.getPatients = (req, res) => {
   const sql = "SELECT * FROM patients";
 

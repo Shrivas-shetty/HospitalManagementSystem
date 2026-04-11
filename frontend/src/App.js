@@ -43,6 +43,7 @@ import Clinical from "./pages/Clinical";
 import BillingAndFinance from "./pages/BillingAndFinance";
 import Infrastructure from "./pages/Infrastructure";
 import AnalyticsHome from "./pages/AnalyticsHome";
+import AdmissionBills from "./pages/AdmissionBills";
 
 function App() {
   return (
@@ -153,6 +154,10 @@ function App() {
 
         <Route path="/analyticsHome" element={
           <ProtectedRoute><AnalyticsHome/></ProtectedRoute>
+        } />
+
+        <Route path="/admissionBills" element={
+          <ProtectedRoute><AdmissionBills/></ProtectedRoute>
         } />
 
 

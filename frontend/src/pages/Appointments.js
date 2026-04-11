@@ -175,7 +175,7 @@ function Appointments() {
                 <tr style={{ textAlign: "left", borderBottom: "2px solid #004a99" }}>
                   <th style={thStyle}>ID</th>
                   <th style={thStyle}>Patient Details</th>
-                  <th style={thStyle}>Consultant</th>
+                  <th style={thStyle}>Doctor</th>
                   <th style={thStyle}>Time Slot</th>
                   <th style={thStyle}>Status</th>
                   <th style={thStyle}>Actions</th>
@@ -190,7 +190,7 @@ function Appointments() {
                       <div style={{ fontSize: "0.75rem", color: "#7f8c8d" }}>ID : {a.patient_id}</div>
                     </td>
                     <td style={tdStyle}>
-                      <div style={{ color: "#004a99", fontWeight: "500" }}>Dr. {a.doctor_name}</div>
+                      <div style={{ color: "#004a99", fontWeight: "500" }}>{a.doctor_name}</div>
                       <div style={{ fontSize: "0.75rem", color: "#3498db" }}>{a.specialization}</div>
                     </td>
                     <td style={tdStyle}>{a.appointment_date.substring(0, 16)}</td>

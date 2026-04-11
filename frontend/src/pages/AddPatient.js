@@ -23,7 +23,7 @@ function AddPatient() {
       setTimeout(() => navigate("/patients"), 2000);
     } catch (err) {
       console.log(err);
-      setMessage({ text: "Error: Database constraint violated. Please check your inputs.", type: "error" });
+      setMessage({ text: "Error: Please check your inputs.", type: "error" });
     }
   };
 

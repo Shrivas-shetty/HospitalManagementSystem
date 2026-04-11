@@ -70,7 +70,7 @@ function ViewAllPrescriptions() {
                   <tr style={{ textAlign: "left", borderBottom: "2px solid #6f42c1" }}>
                     <th style={thStyle}>Date Issued</th>
                     <th style={thStyle}>Patient Name</th>
-                    <th style={thStyle}>Physician</th>
+                    <th style={thStyle}>Doctor</th>
                     <th style={thStyle}>Medication</th>
                     <th style={thStyle}>Clinical Instructions</th>
                   </tr>
@@ -88,7 +88,7 @@ function ViewAllPrescriptions() {
                         {p.patient_name}
                       </td>
                       <td style={tdStyle}>
-                        <span style={docTag}>Dr. {p.doctor_name}</span>
+                        <span style={docTag}>{p.doctor_name}</span>
                       </td>
                       <td style={{ ...tdStyle, color: "#6f42c1", fontWeight: "bold" }}>
                         {p.medication}

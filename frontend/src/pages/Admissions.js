@@ -7,9 +7,9 @@ import { useNavigate } from "react-router-dom";
 function Admissions() {
   const [admissions, setAdmissions] = useState([]);
   const [editData, setEditData] = useState(null);
-  const [newData, setNewData] = useState({ patient_id: '', room_id: '' });
+  const [newData, setNewData] = useState({ patient_id: '', room_id: '', doctor_id: '' });
   const [message, setMessage] = useState({ text: "", type: "" });
-  const [showConfirm, setShowConfirm] = useState(null); // New state for UI confirmation
+  const [showConfirm, setShowConfirm] = useState(null); 
   const navigate = useNavigate();
 
   const fetchAdmissions = () => {
@@ -28,13 +28,18 @@ function Admissions() {
     const payload = { ...newData, admission_date: today };
 
     try {
+<<<<<<< HEAD
       await API.post("/admissions/add-secure", payload);
+=======
+      // Calling the NEW v2 endpoint
+      await API.post("/admissions/add-v2", payload);
+>>>>>>> d77ae33 (Local updates before synicng with github)
       setMessage({ text: `Success! Admission logged for ${today}`, type: "success" });
-      setNewData({ patient_id: '', room_id: '' });
+      setNewData({ patient_id: '', room_id: '', doctor_id: '' });
       fetchAdmissions();
       setTimeout(() => setMessage({ text: "", type: "" }), 3000);
     } catch (err) {
-      setMessage({ text: "Admission failed. Check Patient/Room IDs.", type: "error" });
+      setMessage({ text: "Admission failed. Check Patient/Room/Doctor IDs.", type: "error" });
     }
   };
 
@@ -59,7 +64,8 @@ function Admissions() {
         admission_date: editData.admission_date?.substring(0, 10),
         discharge_date: editData.discharge_date?.substring(0, 10)
       };
-      await API.put(`/admissions/update/${editData.admission_id}`, payload);
+      // Calling the NEW v2 endpoint
+      await API.put(`/admissions/update-v2/${editData.admission_id}`, payload);
       setEditData(null);
       setMessage({ text: "Record updated.", type: "success" });
       fetchAdmissions();
@@ -69,7 +75,6 @@ function Admissions() {
     }
   };
 
-  // Modern Styling Constants
   const containerStyle = {
     minHeight: "100vh",
     backgroundImage: "linear-gradient(rgba(244, 247, 246, 0.85), rgba(244, 247, 246, 0.85)), url('https://images.unsplash.com/photo-1512678080530-7760d81faba6?q=80&w=2074&auto=format&fit=crop')",
@@ -100,14 +105,12 @@ function Admissions() {
             <button onClick={() => navigate("/dashboard")} style={backBtnStyle}>← Dashboard</button>
           </div>
 
-          {/* Success/Error Message */}
           {message.text && (
             <div style={{ ...msgStyle, backgroundColor: message.type === "success" ? "#d4edda" : "#f8d7da", color: message.type === "success" ? "#155724" : "#721c24" }}>
               {message.text}
             </div>
           )}
 
-          {/* UI Confirmation Message for Discharge */}
           {showConfirm && (
             <div style={{ ...msgStyle, backgroundColor: "#fff3cd", color: "#856404", border: "1px solid #ffeeba", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <span>Are you sure you want to discharge patient #{showConfirm}?</span>
@@ -130,15 +133,23 @@ function Admissions() {
                 <label style={labelStyle}>Room ID</label>
                 <input type="number" required style={inputStyle} value={newData.room_id} onChange={(e) => setNewData({ ...newData, room_id: e.target.value })} />
               </div>
+              <div style={{ flex: 1 }}>
+                <label style={labelStyle}>Doctor ID</label>
+                <input type="number" required style={inputStyle} value={newData.doctor_id} onChange={(e) => setNewData({ ...newData, doctor_id: e.target.value })} />
+              </div>
               <button type="submit" style={submitBtnStyle}>Confirm Admission</button>
             </form>
           </div>
 
-          {/* EDIT MODAL-LIKE SECTION */}
+          {/* EDIT SECTION */}
           {editData && (
             <div style={{ ...cardStyle, borderLeft: "5px solid #3498db" }}>
               <h3 style={{ marginTop: 0 }}>Update Admission #{editData.admission_id}</h3>
-              <form onSubmit={handleUpdate} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "15px" }}>
+              <form onSubmit={handleUpdate} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "15px" }}>
+                <div>
+                  <label style={labelStyle}>Doctor ID</label>
+                  <input type="number" style={inputStyle} value={editData.doctor_id || ""} onChange={(e) => setEditData({ ...editData, doctor_id: e.target.value })} />
+                </div>
                 <div>
                   <label style={labelStyle}>Admission Date</label>
                   <input type="date" style={inputStyle} value={editData.admission_date?.substring(0, 10)} onChange={(e) => setEditData({ ...editData, admission_date: e.target.value })} />
@@ -163,6 +174,7 @@ function Admissions() {
                   <th style={thStyle}>ID</th>
                   <th style={thStyle}>Patient ID</th>
                   <th style={thStyle}>Room No</th>
+                  <th style={thStyle}>Doctor ID</th>
                   <th style={thStyle}>Admitted On</th>
                   <th style={thStyle}>Status</th>
                   <th style={thStyle}>Actions</th>
@@ -174,6 +186,7 @@ function Admissions() {
                     <td style={tdStyle}><b>#{a.admission_id}</b></td>
                     <td style={tdStyle}>{a.patient_id}</td>
                     <td style={tdStyle}>{a.room_id}</td>
+                    <td style={tdStyle}>D-{a.doctor_id}</td>
                     <td style={tdStyle}>{a.admission_date?.substring(0, 10)}</td>
                     <td style={tdStyle}>
                       {a.discharge_date ? (
@@ -197,7 +210,6 @@ function Admissions() {
   );
 }
 
-// Internal Styles
 const inputStyle = { width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #ddd", marginTop: "5px" };
 const labelStyle = { fontSize: "0.8rem", fontWeight: "bold", color: "#555", textTransform: "uppercase" };
 const backBtnStyle = { padding: "8px 16px", background: "#00203f", color: "white", border: "none", borderRadius: "6px", cursor: "pointer" };

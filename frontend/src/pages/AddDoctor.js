@@ -23,7 +23,7 @@ function AddDoctor() {
       setTimeout(() => navigate("/doctors"), 2000);
     } catch (err) {
       console.log(err);
-      setMessage({ text: "No such department exists.", type: "error" });
+      setMessage({ text: "Some error occured.", type: "error" });
     }
   };
 
@@ -133,7 +133,7 @@ function AddDoctor() {
                     required
                     type="number"
                     style={inputStyle}
-                    placeholder="101" 
+                    placeholder="1" 
                     onChange={e => setData({...data, department_id: e.target.value})} 
                   />
                 </div>

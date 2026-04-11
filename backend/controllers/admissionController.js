@@ -87,6 +87,12 @@ exports.dischargeAdmission = (req, res) => {
 };
 
 
+<<<<<<< HEAD
+=======
+
+
+// New function with Room Availability Check
+>>>>>>> d77ae33 (Local updates before synicng with github)
 exports.addAdmissionSecure = (req, res) => {
   const { patient_id, room_id, admission_date } = req.body;
 
@@ -117,6 +123,7 @@ exports.addAdmissionSecure = (req, res) => {
 };
 
 
+<<<<<<< HEAD
 
 
 
@@ -129,3 +136,49 @@ exports.addAdmissionSecure = (req, res) => {
 
 
 
+=======
+// New function with Doctor ID support
+exports.addAdmissionV2 = (req, res) => {
+  const { patient_id, room_id, doctor_id, admission_date } = req.body;
+
+  // Step 1: Check room availability
+  const checkSql = "SELECT status FROM rooms WHERE room_id = ?";
+  
+  db.query(checkSql, [room_id], (err, roomResult) => {
+    if (err) return res.status(500).send("Database error during room check");
+    
+    if (roomResult.length === 0) return res.status(404).send("Error: Room ID does not exist.");
+    if (roomResult[0].status !== 'Available') return res.status(400).send(`Error: Room is ${roomResult[0].status}.`);
+
+    // Step 2: Insert with doctor_id
+    const insertSql = "INSERT INTO admissions (patient_id, room_id, doctor_id, admission_date) VALUES (?, ?, ?, ?)";
+    db.query(insertSql, [patient_id, room_id, doctor_id, admission_date], (err, result) => {
+      if (err) {
+        console.error("MYSQL ERROR:", err.sqlMessage);
+        return res.status(500).send(err.sqlMessage);
+      }
+      res.send("Admission added successfully with Doctor assigned.");
+    });
+  });
+};
+
+// Update Admission with Doctor ID support
+exports.updateAdmissionV2 = (req, res) => {
+  const { id } = req.params;
+  const { patient_id, room_id, doctor_id, admission_date, discharge_date } = req.body;
+
+  const sql = `
+    UPDATE admissions 
+    SET patient_id = ?, room_id = ?, doctor_id = ?, admission_date = ?, discharge_date = ? 
+    WHERE admission_id = ?
+  `;
+
+  db.query(sql, [patient_id, room_id, doctor_id, admission_date, discharge_date, id], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Error updating admission");
+    }
+    res.send("Updated successfully");
+  });
+};
+>>>>>>> d77ae33 (Local updates before synicng with github)
