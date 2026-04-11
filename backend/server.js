@@ -1,3 +1,5 @@
+
+
 const express = require('express');
 const cors = require('cors');
 const db=require('./config/db');
@@ -17,8 +19,6 @@ const stayHistoryRoutes = require('./routes/stayHistoryRoutes');
 const reportsRoutes = require('./routes/reportsRoutes'); 
 
 const billRoutesA = require('./routes/billRoutesA');
-
-
 
 
 
