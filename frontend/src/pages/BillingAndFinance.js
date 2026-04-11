@@ -100,7 +100,7 @@ function BillingAndFinance() {
 
             <div style={cardStyle} onClick={() => navigate("/patients/patientsbyroom")} onMouseOver={(e) => e.currentTarget.style.transform = "translateY(-5px)"} onMouseOut={(e) => e.currentTarget.style.transform = "translateY(0)"}>
               <span style={iconStyle}>🏨</span>
-              <h4 style={{ color: "#00203f", margin: 0 }}>Room Revenue</h4>
+              <h4 style={{ color: "#00203f", margin: 0 }}>Patients by Room Type</h4>
             </div>
           </div>
 

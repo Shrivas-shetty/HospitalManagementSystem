@@ -45,18 +45,20 @@ function Navbar() {
       {/* Logo Section */}
       <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
         <div style={{
-          width: "45px",
+          padding: "0 15px",
           height: "45px",
           background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
           borderRadius: "10px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          fontSize: "1.5rem",
-          fontWeight: "bold",
-          color: "#00203f"
-        }}>H</div>
-      
+          fontSize: "1.3rem",
+          fontWeight: "600", // Gentle bold
+          color: "#00203f",
+          letterSpacing: "0.5px"
+        }}>
+          HealthSync
+        </div>
       </div>
 
       {/* Expanded Links */}
@@ -67,7 +69,8 @@ function Navbar() {
         <span style={navItemStyle} onMouseOver={handleHover} onMouseOut={handleMouseOut} onClick={() => navigate("/billingAndFinance")}>Finance</span>
         <span style={navItemStyle} onMouseOver={handleHover} onMouseOut={handleMouseOut} onClick={() => navigate("/analyticsHome")}>Insights</span>
         <span style={navItemStyle} onMouseOver={handleHover} onMouseOut={handleMouseOut} onClick={() => navigate("/reports")}>Reports</span>
-        
+        <span style={navItemStyle} onMouseOver={handleHover} onMouseOut={handleMouseOut} onClick={() => navigate("/admissionbills")}>Admission Bills</span>
+
         <button 
           onClick={handleLogout}
           style={{

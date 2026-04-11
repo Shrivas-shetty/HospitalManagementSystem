@@ -84,7 +84,7 @@ function Reports() {
                 {topPatients.map((p, i) => (
                   <div key={i} style={patientCard}>
                     <div style={{ fontWeight: "bold" }}>{p.name}</div>
-                    <div style={{ fontSize: "12px", color: "#7f8c8d" }}>ID: {p.patient_id} | {p.email}</div>
+                    <div style={{ fontSize: "12px", color: "#7f8c8d" }}> {p.patient_id}  {p.email}</div>
                   </div>
                 ))}
                 {topPatients.length === 0 && <p style={{fontSize: "14px", color: "#95a5a6"}}>Loading top patient...</p>}

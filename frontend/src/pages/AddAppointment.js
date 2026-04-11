@@ -30,7 +30,7 @@ function AddAppointment() {
       setTimeout(() => navigate("/appointments"), 2000);
     } catch (err) {
       console.error(err);
-      setMessage({ text: "Database constraints viloated. Check IDs.", type: "error" });
+      setMessage({ text: "Some error occured. Check IDs.", type: "error" });
     }
   };
 

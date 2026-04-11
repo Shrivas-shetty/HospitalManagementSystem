@@ -16,6 +16,7 @@ const prescriptionRoutes = require('./routes/prescriptionRoutes');
 const stayHistoryRoutes = require('./routes/stayHistoryRoutes');
 const reportsRoutes = require('./routes/reportsRoutes'); 
 
+const billRoutesA = require('./routes/billRoutesA');
 
 
 
@@ -37,6 +38,9 @@ app.use('/payments', paymentRoutes);
 app.use('/prescriptions', prescriptionRoutes);
 app.use('/stay-history', stayHistoryRoutes);
 app.use('/reports', reportsRoutes);
+
+app.use('/bills-a', billRoutesA);
+
 
 
 app.get('/', (req, res) => {

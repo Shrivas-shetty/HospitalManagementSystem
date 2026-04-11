@@ -2,9 +2,6 @@ const db = require('../config/db');
 
 // Get All Bills
 exports.getBills = (req, res) => {
-  if (req.user.role !== 'Admin') {
-    return res.status(403).send("Only Admin can view bills");
-  }
 
   const sql = `
     SELECT 

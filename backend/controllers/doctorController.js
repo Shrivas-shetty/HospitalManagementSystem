@@ -34,6 +34,9 @@ exports.getDoctors = (req, res) => {
 
 
 exports.updateDoctor = (req, res) => {
+  if (req.user.role !== 'Admin') {
+    return res.status(403).send("Access denied");
+  }
   const { id } = req.params;
   const { name, specialization,fees,department_id} = req.body;
 
@@ -51,6 +54,9 @@ exports.updateDoctor = (req, res) => {
 
 // DELETE Patient
 exports.deleteDoctor = (req, res) => {
+  if (req.user.role !== 'Admin') {
+    return res.status(403).send("Access denied");
+  }
   const { id } = req.params;
 
   const sql = "DELETE FROM doctors WHERE doctor_id=?";

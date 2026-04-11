@@ -3,6 +3,9 @@ const db = require('../config/db');
 
 // Add Patient
 exports.addRoom = (req, res) => {
+  if (req.user.role !== 'Admin') {
+    return res.status(403).send("Access denied");
+  }
   const {room_number,type,status} = req.body;
 
   const sql = "INSERT INTO rooms (room_number,type,status) VALUES (?, ?, ?)";
@@ -35,6 +38,9 @@ exports.getRooms = (req, res) => {
 
 
 exports.updateRoom = (req, res) => {
+  if (req.user.role !== 'Admin') {
+    return res.status(403).send("Access denied");
+  }
   const { id } = req.params;
   const {room_number,type,status} = req.body;
 
@@ -52,6 +58,9 @@ exports.updateRoom = (req, res) => {
 
 // DELETE Patient
 exports.deleteRoom = (req, res) => {
+  if (req.user.role !== 'Admin') {
+    return res.status(403).send("Access denied");
+  }
   const { id } = req.params;
 
   const sql = "DELETE FROM rooms WHERE room_id=?";

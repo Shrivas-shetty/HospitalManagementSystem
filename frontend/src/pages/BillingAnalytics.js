@@ -55,7 +55,7 @@ function BillingAnalytics() {
             
             {/* SECTION 1: Stored Function Implementation */}
             <div style={cardStyle}>
-              <h3 style={titleStyle}>Quick Bill Lookup (Stored Function)</h3>
+              <h3 style={titleStyle}>Quick Appointment Bill Lookup (Stored Function)</h3>
               <div style={{ display: "flex", gap: "10px", marginBottom: "15px", marginTop: "20px" }}>
                 <input 
                   type="number" 
