@@ -28,12 +28,10 @@ function Admissions() {
     const payload = { ...newData, admission_date: today };
 
     try {
-<<<<<<< HEAD
-      await API.post("/admissions/add-secure", payload);
-=======
+
       // Calling the NEW v2 endpoint
       await API.post("/admissions/add-v2", payload);
->>>>>>> d77ae33 (Local updates before synicng with github)
+
       setMessage({ text: `Success! Admission logged for ${today}`, type: "success" });
       setNewData({ patient_id: '', room_id: '', doctor_id: '' });
       fetchAdmissions();

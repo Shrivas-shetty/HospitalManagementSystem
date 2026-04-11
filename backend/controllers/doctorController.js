@@ -22,7 +22,9 @@ exports.addDoctor = (req, res) => {
 
 // Get All Doctors
 exports.getDoctors = (req, res) => {
-  const sql = "SELECT * FROM doctors";
+  const sql = `SELECT doc.doctor_id,doc.name,doc.specialization,doc.fees,dep.name as deptname
+               FROM doctors doc JOIN departments dep
+               where doc.department_id=dep.department_id`;
 
   db.query(sql, (err, result) => {
     if (err) {

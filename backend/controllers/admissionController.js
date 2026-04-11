@@ -23,12 +23,12 @@ exports.getAdmissions = (req, res) => {
 // Add New Admission (Requirements Check!)
 // Accessed via: POST /admissions/add
 exports.addAdmission = (req, res) => {
-  const { patient_id, room_id, admission_date } = req.body;
+  const { patient_id, room_id ,admission_date ,doctor_id } = req.body;
 
   // Make sure these match your MySQL Workbench 'Field' names exactly
-  const sql = "INSERT INTO admissions (patient_id, room_id, admission_date) VALUES (?, ?, ?)";
+  const sql = "INSERT INTO admissions (patient_id, room_id, admission_date, doctor_id) VALUES (?, ?, ? ,?)";
 
-  db.query(sql, [patient_id, room_id, admission_date], (err, result) => {
+  db.query(sql, [patient_id, room_id, admission_date ,doctor_id ], (err, result) => {
     if (err) {
       console.error("MYSQL ERROR:", err.sqlMessage); // This prints the EXACT reason in your terminal
       return res.status(500).send(err.sqlMessage);
@@ -87,12 +87,10 @@ exports.dischargeAdmission = (req, res) => {
 };
 
 
-<<<<<<< HEAD
-=======
+
 
 
 // New function with Room Availability Check
->>>>>>> d77ae33 (Local updates before synicng with github)
 exports.addAdmissionSecure = (req, res) => {
   const { patient_id, room_id, admission_date } = req.body;
 
@@ -123,7 +121,6 @@ exports.addAdmissionSecure = (req, res) => {
 };
 
 
-<<<<<<< HEAD
 
 
 
@@ -136,7 +133,6 @@ exports.addAdmissionSecure = (req, res) => {
 
 
 
-=======
 // New function with Doctor ID support
 exports.addAdmissionV2 = (req, res) => {
   const { patient_id, room_id, doctor_id, admission_date } = req.body;
@@ -181,4 +177,3 @@ exports.updateAdmissionV2 = (req, res) => {
     res.send("Updated successfully");
   });
 };
->>>>>>> d77ae33 (Local updates before synicng with github)

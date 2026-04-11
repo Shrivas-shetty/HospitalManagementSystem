@@ -72,7 +72,7 @@ function Doctors() {
           
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
             <div>
-              <h1 style={{ color: "#00203f", margin: 0 }}>Medical Staff Roster</h1>
+              <h1 style={{ color: "#00203f", margin: 0 }}>Doctors Roster</h1>
               <p style={{ color: "#666" }}>Manage doctors, specializations, and consultation fees.</p>
             </div>
             <button 
@@ -127,7 +127,7 @@ function Doctors() {
                   <th style={thStyle}>Doctor Name</th>
                   <th style={thStyle}>Specialization</th>
                   <th style={thStyle}>Consultation Fee</th>
-                  <th style={thStyle}>Dept ID</th>
+                  <th style={thStyle}>Department</th>
                   <th style={thStyle}>Actions</th>
                 </tr>
               </thead>
@@ -138,7 +138,7 @@ function Doctors() {
                     <td style={tdStyle}><span style={nameTag}>{p.name}</span></td>
                     <td style={tdStyle}>{p.specialization}</td>
                     <td style={tdStyle}>₹{p.fees}</td>
-                    <td style={tdStyle}>{p.department_id}</td>
+                    <td style={tdStyle}>{p.deptname}</td>
                     <td style={tdStyle}>
                       <button onClick={() => setEditData(p)} style={editActionBtn}>Edit</button>
                       <button onClick={() => handleDelete(p.doctor_id)} style={deleteActionBtn}>Delete</button>
