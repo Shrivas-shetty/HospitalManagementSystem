@@ -2,12 +2,12 @@
 require('dotenv').config();
 const mysql = require('mysql2');
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: process.env.DB_PASSWORD,
-  database: 'hospital_db',
+  host: process.env.DB_HOST || "zephyr.proxy.rlwy.net",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME || "railway",
   dateStrings: true,
-  port: process.env.DB_PORT
+  port: process.env.DB_PORT || 51277
 });
 
 db.connect((err) => {
