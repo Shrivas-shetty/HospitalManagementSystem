@@ -1,4 +1,157 @@
 
+CREATE DATABASE hospital_db;
+USE hospital_db;
+
+CREATE TABLE patients (
+    patient_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    age INT,
+    gender ENUM('Male', 'Female', 'Other'),
+    phone VARCHAR(15) UNIQUE
+);
+
+
+
+CREATE TABLE appointments (
+    appointment_id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT,
+    doctor_id INT,
+    appointment_date DATETIME NOT NULL,
+    status ENUM('Scheduled', 'Completed', 'Cancelled') DEFAULT 'Scheduled',
+
+    FOREIGN KEY (patient_id) 
+        REFERENCES patients(patient_id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (doctor_id) 
+        REFERENCES doctors(doctor_id)
+        ON DELETE CASCADE
+);
+
+
+
+
+CREATE TABLE doctors (
+    doctor_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    specialization VARCHAR(100),
+    fees DECIMAL(10,2) NOT NULL,
+    department_id INT,
+   FOREIGN KEY(department_id) REFERENCES departments(department_id)
+);
+
+
+
+CREATE TABLE bills (
+    bill_id INT AUTO_INCREMENT PRIMARY KEY,
+    appointment_id INT UNIQUE,
+    total_amount DECIMAL(10,2) NOT NULL,
+    payment_status ENUM('Paid', 'Pending') DEFAULT 'Pending',
+
+    FOREIGN KEY (appointment_id) 
+        REFERENCES appointments(appointment_id)
+        ON DELETE CASCADE
+);
+
+
+CREATE VIEW monthly_revenue AS
+SELECT 
+  DATE_FORMAT(a.appointment_date, '%Y-%m') AS month,
+  SUM(b.total_amount) AS total_revenue
+FROM bills b
+JOIN appointments a ON b.appointment_id = a.appointment_id
+GROUP BY month;
+
+CREATE VIEW doctor_stats AS
+SELECT 
+  d.name,
+  COUNT(a.appointment_id) AS total_appointments
+FROM doctors d
+LEFT JOIN appointments a ON d.doctor_id = a.doctor_id
+GROUP BY d.doctor_id;
+
+CREATE VIEW patient_history AS
+SELECT 
+  p.name AS patient_name,
+  d.name AS doctor_name,
+  a.appointment_date,
+  a.status
+FROM appointments a
+JOIN patients p ON a.patient_id = p.patient_id
+JOIN doctors d ON a.doctor_id = d.doctor_id;
+
+
+
+CREATE TABLE departments (
+    department_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description VARCHAR(255)
+);
+
+
+CREATE TABLE rooms (
+    room_id INT AUTO_INCREMENT PRIMARY KEY,
+    room_number VARCHAR(10) NOT NULL,
+    type VARCHAR(50),   -- ICU / General / Private
+    status VARCHAR(20) DEFAULT 'Available'  -- Available / Occupied
+);
+
+
+CREATE TABLE admissions (
+    admission_id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT,
+    room_id INT,
+    doctor_id INT,
+    admission_date DATE,
+    discharge_date DATE,
+
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id),
+    FOREIGN KEY (room_id) REFERENCES rooms(room_id),
+    FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id)
+);
+
+CREATE TABLE prescriptions (
+    prescription_id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT,
+    doctor_id INT,
+    medication VARCHAR(255),
+    dosage VARCHAR(100),
+    instructions VARCHAR(255),
+    date DATE,
+
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id),
+    FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id)
+);
+
+
+
+CREATE TABLE payments (
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    bill_id INT,
+    amount DECIMAL(10,2),
+    payment_date DATE,
+    method VARCHAR(50),  -- Cash / Card / UPI
+
+    FOREIGN KEY (bill_id) REFERENCES billing(bill_id)
+);
+
+CREATE TABLE users (
+  user_id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  role ENUM('Admin', 'Staff') NOT NULL
+);
+
+
+CREATE TABLE admissionbills (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    admission_id INT,
+    amount INT,
+    status ENUM('paid', 'unpaid')
+);
+
+
+
 
 --(we wont be using patient_history view)
 
@@ -244,6 +397,7 @@ payments
 
 
 
+
 DELIMITER //
 
 -- Trigger to mark room as Occupied when a new admission is added
@@ -255,6 +409,7 @@ BEGIN
     SET status = 'Occupied' 
     WHERE room_id = NEW.room_id;
 END //
+
 
 -- Trigger to mark room as Available when an admission is deleted (discharged)
 CREATE TRIGGER after_admission_delete
@@ -269,17 +424,71 @@ END //
 DELIMITER ;
 
 
+//UNEXPECTED CHANGES ARE BELOW
+
+ALTER TABLE admissions
+ADD doctor_id INT,
+ADD CONSTRAINT fk_admissions_doctor
+FOREIGN KEY (doctor_id)
+REFERENCES doctors(doctor_id);
+
+
+
+
+
+CREATE TABLE admissionbills (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    admission_id INT,
+    amount INT,
+    status ENUM('paid', 'unpaid'),
+
+    CONSTRAINT fk_admission_bill
+    FOREIGN KEY (admission_id)
+    REFERENCES admissions(admission_id)
+    ON DELETE CASCADE
+);
 
 
 
 
 
 
+ 
+DELIMITER //                  --this trigger generates admission bill while discharging
 
+CREATE TRIGGER before_admission_discharge
+BEFORE DELETE ON admissions
+FOR EACH ROW
+BEGIN
+    DECLARE v_amount DECIMAL(10,2);
+    DECLARE v_days INT;
+    DECLARE v_rate INT;
 
+    -- 1. Determine Rate based on Room Type
+    SELECT 
+        CASE 
+            WHEN LOWER(type) = 'general' THEN 500
+            WHEN LOWER(type) = 'semi-private' THEN 1200
+            WHEN LOWER(type) = 'private' THEN 2500
+            WHEN LOWER(type) = 'icu' THEN 5000
+            ELSE 0
+        END INTO v_rate
+    FROM rooms 
+    WHERE room_id = OLD.room_id;
 
+    -- 2. Calculate Stay Duration (StayHistory Logic)
+    SET v_days = GREATEST(1, DATEDIFF(CURDATE(), OLD.admission_date));
 
+    -- 3. Apply ₹1000 Minimum Floor
+    SET v_amount = GREATEST(1000, v_days * v_rate);
 
+    -- 4. Insert into admissionbills
+    -- Using OLD.admission_id because it still exists in this 'BEFORE' window
+    INSERT INTO admissionbills (admission_id, amount, status)
+    VALUES (OLD.admission_id, v_amount, 'Unpaid');
+END //
+
+DELIMITER ;
 
 
 
