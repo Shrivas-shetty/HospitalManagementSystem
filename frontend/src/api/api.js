@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000"
+  baseURL: "https://hospitalmanagementsystem-owh0.onrender.com"
 });
 
 // attach token automatically
