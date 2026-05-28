@@ -112,7 +112,7 @@ function AddDoctor() {
               <input 
                 required
                 style={inputStyle}
-                placeholder="e.g. Cardiology" 
+                placeholder="e.g. Surgical/Clinical" 
                 onChange={e => setData({...data, specialization: e.target.value})} 
               />
 
