@@ -122,17 +122,6 @@ exports.addAdmissionSecure = (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // New function with Doctor ID support
 exports.addAdmissionV2 = (req, res) => {
   const { patient_id, room_id, doctor_id, admission_date } = req.body;
