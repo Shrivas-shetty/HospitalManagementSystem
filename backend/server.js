@@ -24,7 +24,8 @@ const billRoutesA = require('./routes/billRoutesA');
 
 
 app.use(cors({
-  origin: "*"
+  origin: "*",
+  credentials: true
 }));
 
 app.use(express.json());
