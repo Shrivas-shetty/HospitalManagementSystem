@@ -107,7 +107,6 @@ function Register() {
             onChange={(e) => setData({ ...data, role: e.target.value })}
           >
             <option value="" disabled>Select Role</option>
-            <option value="Admin">Admin</option>
             <option value="Staff">Staff</option>
           </select>
 
