@@ -3,7 +3,7 @@ import API from "../api/api";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const [message, setMessage] = useState({ text: "", type: "" }); // type can be 'success' or 'error'
+  const [message, setMessage] = useState({ text: "", type: "" });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -13,16 +13,12 @@ function Login() {
     try {
       const res = await API.post("/auth/login", { username, password });
       localStorage.setItem("token", res.data.token);
-      
-      // Set success message
+
       setMessage({ text: "Login Successful! Redirecting...", type: "success" });
-      
-      // Wait 1.5 seconds so they can actually see the message before navigating
       setTimeout(() => navigate("/dashboard"), 1500);
-      
+
     } catch (err) {
       setMessage({ text: "Invalid Username or Password", type: "error" });
-      // Hide error after 3 seconds
       setTimeout(() => setMessage({ text: "", type: "" }), 3000);
     }
   };
@@ -49,33 +45,54 @@ function Login() {
         width: "90%"
       }}>
         <div style={{ color: "#004a99", marginBottom: "20px" }}>
-           <h1 style={{ fontSize: "2.2rem", fontWeight: "700", margin: "0" }}>HMS</h1>
-           <div style={{ height: "4px", width: "50px", background: "#00f2fe", margin: "10px auto" }}></div>
+          <h1 style={{ fontSize: "2.2rem", fontWeight: "700", margin: "0" }}>HMS</h1>
+          <div style={{ height: "4px", width: "50px", background: "#00f2fe", margin: "10px auto" }}></div>
         </div>
+
         {message.text && (
           <div style={{
-           padding: "10px",
-           marginBottom: "15px",
-           borderRadius: "8px",
-           fontSize: "0.9rem",
-           fontWeight: "600",
-           backgroundColor: message.type === "success" ? "#d4edda" : "#f8d7da",
-           color: message.type === "success" ? "#155724" : "#721c24",
-           border: `1px solid ${message.type === "success" ? "#c3e6cb" : "#f5c6cb"}`,
-            transition: "all 0.3s ease"
+            padding: "10px",
+            marginBottom: "15px",
+            borderRadius: "8px",
+            fontSize: "0.9rem",
+            fontWeight: "600",
+            backgroundColor: message.type === "success" ? "#d4edda" : "#f8d7da",
+            color: message.type === "success" ? "#155724" : "#721c24",
+            border: `1px solid ${message.type === "success" ? "#c3e6cb" : "#f5c6cb"}`
           }}>
             {message.type === "success" ? "✓ " : "✕ "} {message.text}
           </div>
         )}
-        <h2 style={{ color: "#333", fontSize: "1.5rem", marginBottom: "10px" }}>Welcome Back</h2>
-        <p style={{ color: "#666", fontSize: "0.9rem", marginBottom: "30px" }}>
+
+        <h2 style={{ color: "#333", fontSize: "1.5rem", marginBottom: "10px" }}>
+          Welcome Back
+        </h2>
+
+        <p style={{ color: "#666", fontSize: "0.9rem", marginBottom: "20px" }}>
           Please enter your details to access the dashboard.
         </p>
 
+        {/* 🔥 DEMO CREDENTIALS BOX */}
+        <div style={{
+          background: "#eef6ff",
+          border: "1px dashed #004a99",
+          borderRadius: "8px",
+          padding: "10px",
+          fontSize: "0.85rem",
+          color: "#003366",
+          marginBottom: "20px"
+        }}>
+          <strong>Demo Credentials:</strong><br />
+          Username: <b>admin3</b><br />
+          Password: <b>3210</b>
+        </div>
+
         <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-          <input 
-            placeholder="Username" 
+          <input
+            placeholder="Username"
             required
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             style={{
               padding: "12px",
               borderRadius: "8px",
@@ -83,12 +100,14 @@ function Login() {
               fontSize: "1rem",
               outline: "none"
             }}
-            onChange={(e) => setUsername(e.target.value)} 
           />
-          <input 
-            type="password" 
-            placeholder="Password" 
+
+          <input
+            type="password"
+            placeholder="Password"
             required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             style={{
               padding: "12px",
               borderRadius: "8px",
@@ -96,7 +115,6 @@ function Login() {
               fontSize: "1rem",
               outline: "none"
             }}
-            onChange={(e) => setPassword(e.target.value)} 
           />
 
           <button
@@ -120,7 +138,6 @@ function Login() {
             Sign In
           </button>
 
-          {/* BACK BUTTON ADDED HERE */}
           <button
             type="button"
             onClick={() => navigate("/")}
@@ -133,7 +150,7 @@ function Login() {
               border: "2px solid #004a99",
               borderRadius: "8px",
               cursor: "pointer",
-              transition: "0.3s",
+              transition: "0.3s"
             }}
             onMouseOver={(e) => {
               e.target.style.background = "#004a99";
@@ -149,7 +166,8 @@ function Login() {
         </form>
 
         <p style={{ marginTop: "25px", fontSize: "0.9rem", color: "#666" }}>
-          New user? <span 
+          New user?{" "}
+          <span
             onClick={() => navigate("/register")}
             style={{ color: "#004a99", cursor: "pointer", fontWeight: "700" }}
           >
