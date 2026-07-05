@@ -72,7 +72,7 @@ function Login() {
           Please enter your details to access the dashboard.
         </p>
 
-        {/* 🔥 DEMO CREDENTIALS BOX */}
+        {/* demo credentails box */}
         <div style={{
           background: "#eef6ff",
           border: "1px dashed #004a99",
