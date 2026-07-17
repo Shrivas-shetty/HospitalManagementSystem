@@ -77,14 +77,37 @@ function Login() {
           background: "#eef6ff",
           border: "1px dashed #004a99",
           borderRadius: "8px",
-          padding: "10px",
+          padding: "12px",
           fontSize: "0.85rem",
           color: "#003366",
-          marginBottom: "20px"
+          marginBottom: "20px",
+          textAlign: "left"
         }}>
-          <strong>Demo Credentials:</strong><br />
+          <strong>Demo Access:</strong><br />
           Username: <b>admin3</b><br />
-          Password: <b>3210</b>
+          Password: <b>3210</b><br /><br />
+
+          <div style={{ fontSize: "0.8rem", color: "#555" }}>
+            * Live backend is temporarily unavailable due to hosting limitations. <br />
+            * Full source code and implementation are available on GitHub.
+          </div>
+
+          <button
+            onClick={() => window.open("https://github.com/Shrivas-shetty/HospitalManagementSystem", "_blank")}
+            style={{
+              marginTop: "10px",
+              padding: "8px 12px",
+              fontSize: "0.8rem",
+              fontWeight: "600",
+              color: "#fff",
+              background: "#004a99",
+              border: "none",
+              borderRadius: "6px",
+              cursor: "pointer"
+            }} 
+          >
+            View GitHub Repository
+          </button>
         </div>
 
         <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
