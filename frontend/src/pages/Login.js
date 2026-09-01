@@ -1,29 +1,45 @@
 import { useState } from "react";
+
 import API from "../api/api";
+
 import { useNavigate } from "react-router-dom";
 
 function Login() {
+
   const [message, setMessage] = useState({ text: "", type: "" });
+
   const [username, setUsername] = useState("");
+
   const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
+
     e.preventDefault();
+
     try {
+
       const res = await API.post("/auth/login", { username, password });
+
       localStorage.setItem("token", res.data.token);
 
       setMessage({ text: "Login Successful! Redirecting...", type: "success" });
+
       setTimeout(() => navigate("/dashboard"), 1500);
 
     } catch (err) {
+
       setMessage({ text: "Invalid Username or Password", type: "error" });
+
       setTimeout(() => setMessage({ text: "", type: "" }), 3000);
+
     }
+
   };
 
   return (
+
     <div style={{
       height: "100vh",
       width: "100%",
@@ -35,6 +51,7 @@ function Login() {
       backgroundPosition: "center",
       fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
     }}>
+
       <div style={{
         background: "rgba(255, 255, 255, 0.95)",
         padding: "50px",
@@ -44,12 +61,28 @@ function Login() {
         maxWidth: "400px",
         width: "90%"
       }}>
+
         <div style={{ color: "#004a99", marginBottom: "20px" }}>
-          <h1 style={{ fontSize: "2.2rem", fontWeight: "700", margin: "0" }}>HMS</h1>
-          <div style={{ height: "4px", width: "50px", background: "#00f2fe", margin: "10px auto" }}></div>
+
+          <h1 style={{
+            fontSize: "2.2rem",
+            fontWeight: "700",
+            margin: "0"
+          }}>
+            HMS
+          </h1>
+
+          <div style={{
+            height: "4px",
+            width: "50px",
+            background: "#00f2fe",
+            margin: "10px auto"
+          }}></div>
+
         </div>
 
         {message.text && (
+
           <div style={{
             padding: "10px",
             marginBottom: "15px",
@@ -60,19 +93,29 @@ function Login() {
             color: message.type === "success" ? "#155724" : "#721c24",
             border: `1px solid ${message.type === "success" ? "#c3e6cb" : "#f5c6cb"}`
           }}>
+
             {message.type === "success" ? "✓ " : "✕ "} {message.text}
+
           </div>
+
         )}
 
-        <h2 style={{ color: "#333", fontSize: "1.5rem", marginBottom: "10px" }}>
+        <h2 style={{
+          color: "#333",
+          fontSize: "1.5rem",
+          marginBottom: "10px"
+        }}>
           Welcome Back
         </h2>
 
-        <p style={{ color: "#666", fontSize: "0.9rem", marginBottom: "20px" }}>
+        <p style={{
+          color: "#666",
+          fontSize: "0.9rem",
+          marginBottom: "20px"
+        }}>
           Please enter your details to access the dashboard.
         </p>
 
-        {/* demo credentails box */}
         <div style={{
           background: "#eef6ff",
           border: "1px dashed #004a99",
@@ -83,17 +126,16 @@ function Login() {
           marginBottom: "20px",
           textAlign: "left"
         }}>
-          <strong>Demo Access:</strong><br />
-          Username: <b>admin3</b><br />
-          Password: <b>3210</b><br /><br />
 
-          <div style={{ fontSize: "0.8rem", color: "#555" }}>
-            * Live backend is temporarily unavailable due to hosting limitations. <br />
-            * Full source code and implementation are available on GitHub.
-          </div>
+          <strong>Demo Access:</strong><br />
+          Username: <b>admin1</b><br />
+          Password: <b>1234</b>
 
           <button
-            onClick={() => window.open("https://github.com/Shrivas-shetty/HospitalManagementSystem", "_blank")}
+            onClick={() => window.open(
+              "https://github.com/Shrivas-shetty/HospitalManagementSystem",
+              "_blank"
+            )}
             style={{
               marginTop: "10px",
               padding: "8px 12px",
@@ -104,13 +146,22 @@ function Login() {
               border: "none",
               borderRadius: "6px",
               cursor: "pointer"
-            }} 
+            }}
           >
             View GitHub Repository
           </button>
+
         </div>
 
-        <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+        <form
+          onSubmit={handleLogin}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px"
+          }}
+        >
+
           <input
             placeholder="Username"
             required
@@ -186,20 +237,36 @@ function Login() {
           >
             Back
           </button>
+
         </form>
 
-        <p style={{ marginTop: "25px", fontSize: "0.9rem", color: "#666" }}>
+        <p style={{
+          marginTop: "25px",
+          fontSize: "0.9rem",
+          color: "#666"
+        }}>
+
           New user?{" "}
+
           <span
             onClick={() => navigate("/register")}
-            style={{ color: "#004a99", cursor: "pointer", fontWeight: "700" }}
+            style={{
+              color: "#004a99",
+              cursor: "pointer",
+              fontWeight: "700"
+            }}
           >
             Create an account
           </span>
+
         </p>
+
       </div>
+
     </div>
+
   );
+
 }
 
 export default Login;
