@@ -25,6 +25,11 @@ exports.getStayHistory = (req, res) => {
 };
 
 
+
+
+// For every patient's stay, calculate how many days they stayed and 
+// calculate their room charges based on the room type.
+
 exports.getStayHistorySummary = (req, res) => {
   const sql = `
     SELECT 

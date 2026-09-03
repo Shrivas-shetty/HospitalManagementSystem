@@ -49,8 +49,8 @@ exports.updateAppointment = (req, res) => {
   const { id } = req.params; // This is the appointment_id from the URL
   const { patient_id, doctor_id, appointment_date, status } = req.body;
 
-  // CRITICAL FIX: You had WHERE patient_id=?. 
-  // It MUST be WHERE appointment_id=? otherwise it updates the wrong rows.
+  // CRITICAL FIX: I had WHERE patient_id=?. 
+  // But it should be WHERE appointment_id=? otherwise it updates the wrong rows.
   const sql = `
     UPDATE appointments 
     SET patient_id=?, doctor_id=?, appointment_date=?, status=? 

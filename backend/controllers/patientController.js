@@ -60,6 +60,7 @@ exports.deletePatient = (req, res) => {
 
 
 
+// procedure
 exports.getPatientsByRoom = (req, res) => {
   const { roomType } = req.params; // Get the room type from the URL
   const sql = `CALL getPatientsByRoomType(?)`;

@@ -1,11 +1,9 @@
 const db = require('../config/db');
 
-// Get All Admissions (Simplified - No JOINS for now to focus on logic)
+// Get All Admissions
 // Accessed via: GET /admissions
-exports.getAdmissions = (req, res) => {
-  // Option: Carry over Admin check if needed
-  // if (req.user.role !== 'Admin') return res.status(403).send("Admin Access Only");
 
+exports.getAdmissions = (req, res) => {
   const sql = `
     SELECT * FROM admissions 
     ORDER BY admission_id DESC
@@ -63,18 +61,8 @@ exports.updateAdmission = (req, res) => {
 exports.dischargeAdmission = (req, res) => {
   const { id } = req.params;
 
-  // IMPORTANT REQUIREMENT: Instead of a normal DELETE, we must first
-  // save the curdate() and then delete it.
+  // save the curdate() and then delete it. Push record into STAY HISTORY before deleting via Trigger
 
-  // We are going to use a special SQL query that does both in one operation
-  // for your later trigger. We will create a query that SETs curdate(), 
-  // and your database trigger will handle the rest.
-
-  // Simplified approach to get the behavior you want:
-  // Step 1: Tell the database to perform the discharge operation with a special query.
-  // Then your AFTER DELETE trigger (which you'll create later) can access it.
-
-  // (This matches your requirement to "delete it" while still storing the date)
   const sql = "DELETE FROM admissions WHERE admission_id = ?";
 
   db.query(sql, [id], (err, result) => {
@@ -122,7 +110,7 @@ exports.addAdmissionSecure = (req, res) => {
 
 
 
-// New function with Doctor ID support
+// New function with Doctor ID support (old one didnt insert doctor ID)
 exports.addAdmissionV2 = (req, res) => {
   const { patient_id, room_id, doctor_id, admission_date } = req.body;
 

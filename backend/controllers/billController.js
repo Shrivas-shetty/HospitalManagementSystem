@@ -81,7 +81,6 @@ exports.deleteBill = (req, res) => {
 };
 
 
-//---------------------------------------------------------------------
 
 
 
@@ -102,7 +101,8 @@ exports.getPatientTotalBill = (req, res) => {
 exports.getLongStayPatients = (req, res) => {
   const sql = "CALL longStayPatients()";
 
-  db.query(sql, (err, result) => {
+  db.query(sql, (err, result) => 
+  {
     if (err) {
       console.error(err);
       return res.status(500).send("Error fetching long stay patients");

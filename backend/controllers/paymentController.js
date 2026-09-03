@@ -21,7 +21,7 @@ exports.processPayment = (req, res) => {
 
 // Get All Payments
 exports.getPayments = (req, res) => {
-  // Optional: if (req.user.role !== 'Admin') return res.status(403).send("Admin only");
+  // Optional: if (req.user.role !== 'admin') return res.status(403).send("Admin only");
 
   const sql = `
     SELECT 
